@@ -180,7 +180,7 @@ function renderChips() {
   for (const a of areas) box.append(make(a, a));
 }
 
-function buildEntry({ year, name, summary, tags, detail, metrics, links, id }) {
+function buildEntry({ name, summary, tags, detail, metrics, links, id }) {
   const entry = el("div", "entry");
   entry.dataset.id = id;
 
@@ -188,7 +188,6 @@ function buildEntry({ year, name, summary, tags, detail, metrics, links, id }) {
   head.type = "button";
   head.setAttribute("aria-expanded", "false");
   head.setAttribute("aria-controls", `panel-${id}`);
-  head.append(el("span", "entry__year", year));
   head.append(el("span", "entry__name", name));
   head.append(el("span", "entry__summary", summary));
   head.append(tagList(tags, "entry__tags"));
@@ -282,7 +281,6 @@ function renderIndex() {
 
     const { entry, head } = buildEntry({
       id: name,
-      year: p.year,
       name,
       summary: p.summary,
       tags: p.tech,
@@ -318,7 +316,6 @@ function renderExperience() {
   const exp = data.experience;
   const { entry, head, body } = buildEntry({
     id: "rankia",
-    year: exp.year,
     name: exp.org,
     summary: exp.summary,
     tags: [exp.period],
@@ -363,13 +360,6 @@ function renderContact() {
   for (const l of data.person.links) box.append(link(l.href, l.label));
 }
 
-function renderStale() {
-  if (!data.syncedAt) return;
-  const when = new Date(data.syncedAt);
-  if (Number.isNaN(when.getTime())) return;
-  $("stale").textContent = `Datos de GitHub actualizados el ${when.toLocaleDateString("es-ES")}.`;
-}
-
 /* ---------------- boot ---------------- */
 
 buildThemeToggle();
@@ -387,6 +377,5 @@ load().then((loaded) => {
   renderIndex();
   renderExperience();
   renderContact();
-  renderStale();
   requestAnimationFrame(() => document.body.classList.add("is-ready"));
 });
