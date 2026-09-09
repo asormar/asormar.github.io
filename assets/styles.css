@@ -21,10 +21,24 @@
   --space-2xl: 64px;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 160ms;
+  --dur-panel: 420ms;
 
   --wrap: 1000px;
   --gutter: 48px;
   --col-year: 56px;
+}
+
+:root[data-theme="dark"] {
+  --paper: oklch(16% 0.004 250);
+  --paper-2: oklch(21% 0.005 250);
+  --ink: oklch(95% 0.003 250);
+  --ink-2: oklch(72% 0.006 250);
+  --ink-3: oklch(62% 0.010 250);
+  --mark: oklch(70% 0.165 27);
+  --mark-deep: oklch(80% 0.14 27);
+  --rule: oklch(30% 0.005 250);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -123,17 +137,14 @@ a:hover { color: var(--mark-deep); }
 .chip:hover { border-color: var(--ink-3); color: var(--ink); }
 .chip[aria-pressed="true"] { border-color: var(--mark); color: var(--mark); }
 
-.filters__count { font-family: var(--font-mono); font-size: 12px; color: var(--ink-3); }
 
 /* ---------- index rows ---------- */
 
 .index { border-bottom: 1px solid var(--rule); }
 
-.entry { border-top: 1px solid var(--rule); }
-
 .entry__head {
   display: grid;
-  grid-template-columns: var(--col-year) minmax(0, 1.35fr) minmax(0, 2.2fr) minmax(0, 1.05fr) 22px;
+  grid-template-columns: var(--col-year) minmax(0, 1.35fr) minmax(0, 2.2fr) minmax(0, 1.05fr) 16px;
   gap: 20px;
   width: 100%;
   padding: 17px 0;
@@ -159,18 +170,11 @@ a:hover { color: var(--mark-deep); }
   min-width: 0;
 }
 
-.entry__head[aria-expanded="true"] .entry__name { color: var(--mark); }
+.entry.is-open .entry__name { color: var(--mark); }
 
 .entry__summary { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
 
 .entry__tags { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
-
-.entry__sign {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  color: var(--ink-3);
-  text-align: right;
-}
 
 .tag {
   font-family: var(--font-mono);
@@ -183,11 +187,33 @@ a:hover { color: var(--mark-deep); }
 
 /* ---------- expanded panel ---------- */
 
-.entry__panel {
+/* Height is animated from a value JS measures. The 0fr -> 1fr grid trick is
+   tidier on paper but does not collapse reliably across engines, so the panel
+   carries an explicit height and settles back to auto once it is open. */
+.panel {
+  height: 0;
+  overflow: hidden;
+  transition: height var(--dur-panel) var(--ease-spring);
+}
+
+.panel__body {
   display: grid;
   grid-template-columns: var(--col-year) minmax(0, 1fr);
   gap: 20px;
   padding: 4px 0 30px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    transform var(--dur-panel) var(--ease-spring);
+}
+
+.panel__body > * { grid-column: 2; }
+
+.entry.is-open > .panel .panel__body {
+  opacity: 1;
+  transform: none;
+  transition-delay: 90ms, 0ms;
 }
 
 .entry__body { display: flex; flex-direction: column; gap: 18px; }
@@ -215,6 +241,43 @@ a:hover { color: var(--mark-deep); }
 .metric__label { font-size: 11px; color: var(--ink-3); margin-top: var(--space-xs); }
 
 .entry__links { display: flex; gap: 20px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 12.5px; }
+
+/* ---------- the + / - sign ---------- */
+
+.sign {
+  position: relative;
+  width: 13px;
+  height: 13px;
+  justify-self: end;
+  align-self: center;
+}
+
+.sign__bar {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  background: var(--ink-3);
+  transition: transform var(--dur-panel) var(--ease-spring), background var(--dur-fast) var(--ease-out);
+}
+
+.sign__bar--h { width: 13px; height: 1.5px; }
+.sign__bar--v { width: 1.5px; height: 13px; }
+
+/* the vertical stroke collapses into the horizontal one: + becomes - */
+.entry.is-open .sign__bar--v { transform: scaleY(0) rotate(90deg); }
+.entry.is-open .sign__bar--h { transform: rotate(180deg); background: var(--mark); }
+.entry__head:hover .sign__bar { background: var(--ink); }
+
+/* ---------- filtering ---------- */
+
+.entry {
+  border-top: 1px solid var(--rule);
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.entry.is-hidden {
+  display: none;
+}
 
 /* ---------- experience ---------- */
 
@@ -271,7 +334,7 @@ a:hover { color: var(--mark-deep); }
   .chip { min-height: 44px; padding: 12px 14px; }
 
   .entry__head {
-    grid-template-columns: minmax(0, 1fr) 22px;
+    grid-template-columns: minmax(0, 1fr) 16px;
     grid-template-areas:
       "name sign"
       "summary summary"
@@ -286,7 +349,7 @@ a:hover { color: var(--mark-deep); }
   .entry__name { grid-area: name; font-size: 15.5px; }
   .entry__summary { grid-area: summary; }
   .entry__tags { grid-area: tags; justify-content: flex-start; }
-  .entry__sign { grid-area: sign; }
+  .sign { grid-area: sign; }
 
   .entry__panel { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .entry__panel > .entry__spacer { display: none; }
@@ -302,7 +365,14 @@ a:hover { color: var(--mark-deep); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* the panel still needs to open — just without the travel */
+  .panel { transition: none; }
+  .panel__body { transition: none; opacity: 1; transform: none; }
 }
 
 /* ---------- no-JS fallback ---------- */
@@ -312,3 +382,86 @@ a:hover { color: var(--mark-deep); }
 .fallback__list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
 .fallback__list li { font-size: 14.5px; line-height: 1.6; color: var(--ink-2); }
 .fallback__list a { font-weight: 600; }
+
+/* ---------- theme toggle ---------- */
+
+.theme {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+
+.theme:hover { border-color: var(--ink-3); color: var(--ink); }
+
+.theme__icon {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+/* Sun in light mode; the orb slides and swells into a crescent for dark. */
+.theme__orb {
+  transform-origin: center;
+  transition: transform 520ms var(--ease-spring);
+}
+
+.theme__rays {
+  transform-origin: center;
+  transition: transform 520ms var(--ease-spring), opacity 260ms var(--ease-out);
+}
+
+:root[data-theme="dark"] .theme__orb { transform: translate(4px, -3px) scale(1.45); }
+:root[data-theme="dark"] .theme__rays { transform: rotate(50deg) scale(0.6); opacity: 0; }
+
+/* The crescent is cut by a second disc painted in the page colour. */
+.theme__moon {
+  fill: var(--paper);
+  stroke: none;
+  opacity: 0;
+  transform: translate(3px, -4px);
+  transition: opacity 300ms var(--ease-out);
+}
+
+:root[data-theme="dark"] .theme__moon { opacity: 1; }
+
+/* ---------- theme reveal ---------- */
+
+/* The new theme wipes in as a circle growing from the button. Chrome, Edge
+   and Safari 18+ animate it; elsewhere the swap is simply instant. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+@keyframes reveal {
+  from { clip-path: circle(0 at var(--reveal-x) var(--reveal-y)); }
+  to   { clip-path: circle(var(--reveal-r) at var(--reveal-x) var(--reveal-y)); }
+}
+
+::view-transition-new(root) {
+  animation: reveal 620ms var(--ease-spring);
+}
+
+/* ---------- first paint ---------- */
+
+body { opacity: 0; }
+body.is-ready { opacity: 1; transition: opacity 260ms var(--ease-out); }
+
+@media (prefers-reduced-motion: reduce) {
+  body, body.is-ready { opacity: 1; transition: none; }
+  ::view-transition-new(root) { animation: none; }
+}

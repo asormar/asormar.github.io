@@ -3,41 +3,84 @@
     "name": "Alejandro Sorolla Martínez",
     "location": "Valencia",
     "education": [
-      { "title": "Máster en Tecnologías Audiovisuales, UPV", "note": "en curso" },
-      { "title": "Grado en Tecnología Digital y Multimedia, UPV", "note": "" }
+      {
+        "title": "Máster en Tecnologías Audiovisuales, UPV",
+        "note": "en curso"
+      },
+      {
+        "title": "Grado en Tecnología Digital y Multimedia, UPV",
+        "note": ""
+      }
     ],
     "links": [
-      { "label": "alesoma2004@gmail.com", "href": "mailto:alesoma2004@gmail.com" },
-      { "label": "linkedin", "href": "https://www.linkedin.com/in/alejandro-sorolla-74a262275/" },
-      { "label": "github", "href": "https://github.com/asormar" }
+      {
+        "label": "alesoma2004@gmail.com",
+        "href": "mailto:alesoma2004@gmail.com"
+      },
+      {
+        "label": "linkedin",
+        "href": "https://www.linkedin.com/in/alejandro-sorolla-74a262275/"
+      },
+      {
+        "label": "github",
+        "href": "https://github.com/asormar"
+      }
     ]
   },
-
   "projects": [
     {
       "repo": "superlega-simulator",
       "year": "2026",
+      "area": "Machine learning",
       "summary": "Predicción y simulación de la liga italiana de voleibol.",
-      "tech": ["Python", "scikit-learn"],
+      "tech": [
+        "Python",
+        "scikit-learn"
+      ],
       "detail": "Rating Elo con margen, regresión Ridge de seis variables y simulador de cadena de Markov por Monte Carlo, sobre 1.322 partidos de diez temporadas. Todas las variables se construyen solo con información anterior al partido que se predice, y la evaluación usa origen móvil. Trabajo de Fin de Grado.",
       "metrics": [
-        { "value": "0,7624", "label": "AUC" },
-        { "value": "0,1930", "label": "Brier" },
-        { "value": "0,5677", "label": "log-loss" },
-        { "value": "314", "label": "partidos en test" }
+        {
+          "value": "0,7624",
+          "label": "AUC"
+        },
+        {
+          "value": "0,1930",
+          "label": "Brier"
+        },
+        {
+          "value": "0,5677",
+          "label": "log-loss"
+        },
+        {
+          "value": "314",
+          "label": "partidos en test"
+        }
       ],
-      "extra": { "label": "memoria técnica →", "href": "https://github.com/asormar/superlega-simulator/tree/main/memoria" }
+      "extra": {
+        "label": "memoria técnica →",
+        "href": "https://github.com/asormar/superlega-simulator/tree/main/memoria"
+      }
     },
     {
       "repo": "AI-VideogameSuccessPredictor",
       "display": "videogame-predictor",
       "year": "2026",
+      "area": "Machine learning",
       "summary": "Viabilidad comercial de juegos indie en Steam.",
-      "tech": ["Python", "LightGBM"],
+      "tech": [
+        "Python",
+        "LightGBM"
+      ],
       "detail": "Clasificador de éxito comercial entrenado sobre más de 13.000 títulos reales, usando únicamente señales previas al lanzamiento: género, etiquetas, precio, localización y presencia en tienda. Cuatro modelos comparados; LightGBM en producción.",
       "metrics": [
-        { "value": "13.000", "label": "títulos" },
-        { "value": "4", "label": "modelos comparados" }
+        {
+          "value": "13.000",
+          "label": "títulos"
+        },
+        {
+          "value": "4",
+          "label": "modelos comparados"
+        }
       ],
       "extra": null
     },
@@ -45,24 +88,44 @@
       "repo": "AI-Sign-Language-Detector",
       "display": "sign-language-detector",
       "year": "2026",
+      "area": "Machine learning",
       "summary": "Reconocimiento de lengua de signos por cámara.",
-      "tech": ["Python", "OpenCV"],
+      "tech": [
+        "Python",
+        "OpenCV"
+      ],
       "detail": "Identificación de lengua de signos a través de la cámara del ordenador, con clasificación de imagen y una capa de síntesis de voz que lee en alto las palabras reconocidas.",
       "metrics": [
-        { "value": "tiempo real", "label": "inferencia" }
+        {
+          "value": "tiempo real",
+          "label": "inferencia"
+        }
       ],
       "extra": null
     },
     {
       "repo": "chip8-emulator",
       "year": "2026",
+      "area": "Sistemas y bajo nivel",
       "summary": "Emulación completa de la máquina virtual CHIP-8.",
-      "tech": ["C++17", "SDL2"],
+      "tech": [
+        "C++17",
+        "SDL2"
+      ],
       "detail": "Intérprete del set completo de opcodes de CHIP-8, con display de 64×32, timers de sonido y retardo, y teclado de 16 teclas. Escrito desde cero para entender qué hace una máquina cuando nadie la abstrae.",
       "metrics": [
-        { "value": "35", "label": "instrucciones" },
-        { "value": "64×32", "label": "display" },
-        { "value": "16", "label": "teclas" }
+        {
+          "value": "35",
+          "label": "instrucciones"
+        },
+        {
+          "value": "64×32",
+          "label": "display"
+        },
+        {
+          "value": "16",
+          "label": "teclas"
+        }
       ],
       "extra": null
     },
@@ -70,11 +133,17 @@
       "repo": "DRM-Content-Protection",
       "display": "drm-content-protection",
       "year": "2025",
+      "area": "Sistemas y bajo nivel",
       "summary": "Protección de contenido multimedia.",
-      "tech": ["Python"],
+      "tech": [
+        "Python"
+      ],
       "detail": "Ecosistema completo de protección de contenido multimedia que simula un sistema de gestión de derechos digitales mediante técnicas criptográficas.",
       "metrics": [
-        { "value": "criptografía", "label": "aplicada" }
+        {
+          "value": "criptografía",
+          "label": "aplicada"
+        }
       ],
       "extra": null
     },
@@ -82,12 +151,23 @@
       "repo": "Cartelera_cine",
       "display": "cartelera-cine",
       "year": "2026",
+      "area": "Web y automatización",
       "summary": "Boletín de cartelera automatizado.",
-      "tech": ["JavaScript", "Puppeteer", "GitHub Actions"],
+      "tech": [
+        "JavaScript",
+        "Puppeteer",
+        "GitHub Actions"
+      ],
       "detail": "Sistema que extrae la cartelera de cine y compone y envía un boletín en HTML dos veces por semana, sin intervención. Corre entero sobre GitHub Actions.",
       "metrics": [
-        { "value": "2 / semana", "label": "envíos" },
-        { "value": "20", "label": "ejecuciones" }
+        {
+          "value": "2 / semana",
+          "label": "envíos"
+        },
+        {
+          "value": "20",
+          "label": "ejecuciones"
+        }
       ],
       "extra": null
     },
@@ -95,45 +175,71 @@
       "repo": "VoiceGen",
       "display": "voicegen",
       "year": "2026",
+      "area": "Web y automatización",
       "summary": "La evolución de la síntesis de voz, en interactivo.",
-      "tech": ["JavaScript"],
+      "tech": [
+        "JavaScript"
+      ],
       "detail": "Aplicación educativa que recorre cómo ha progresado la conversión de texto a voz, desde los métodos concatenativos tradicionales hasta las técnicas neuronales modernas.",
       "metrics": [
-        { "value": "concatenativa → neuronal", "label": "recorrido" }
+        {
+          "value": "concatenativa → neuronal",
+          "label": "recorrido"
+        }
       ],
-      "extra": { "label": "abrir →", "href": "https://manuelric.github.io/proyecto_voz/" }
+      "extra": {
+        "label": "abrir →",
+        "href": "https://manuelric.github.io/proyecto_voz/"
+      }
     }
   ],
-
   "experience": {
     "org": "Rankia S.L.",
-    "year": "2026",
-    "period": "jun — jul",
+    "year": "",
+    "period": "2026",
     "summary": "Prácticas en Producto y Tecnología. Cuatro tipos de proyecto sobre una plataforma en producción.",
     "areas": [
       {
         "title": "Integración de IA",
         "lead": "Conector MCP con OAuth 2.1 sobre Cloud Run.",
         "text": "El proveedor no admitía registro dinámico de clientes, así que propuse un servidor de autorización propio en modo proxy y derivé del cambio los requisitos de cifrado, permisos mínimos y rotación.",
-        "tags": ["OAuth 2.1", "PKCE", "MCP", "Cloud Run"]
+        "tags": [
+          "OAuth 2.1",
+          "PKCE",
+          "MCP",
+          "Cloud Run"
+        ]
       },
       {
         "title": "Investigación de producto",
         "lead": "Siete comparadores auditados y un test con usuarios.",
         "text": "Auditoría heurística de siete comparadores según los principios de Nielsen, y un test en móvil con cinco arquetipos para confirmar por comportamiento lo que la teoría solo suponía.",
-        "tags": ["Nielsen", "Test de usabilidad", "Arquetipos"]
+        "tags": [
+          "Nielsen",
+          "Test de usabilidad",
+          "Arquetipos"
+        ]
       },
       {
         "title": "Diagnóstico técnico",
         "lead": "Causa raíz reproducida, no supuesta.",
         "text": "Descarté con peticiones controladas la hipótesis de partida de un fallo de renderizado y aislé la causa real comparando dos motores distintos.",
-        "tags": ["HTTP", "SVG", "CDN", "curl"]
+        "tags": [
+          "HTTP",
+          "SVG",
+          "CDN",
+          "curl"
+        ]
       },
       {
         "title": "Especificación",
         "lead": "Criterios verificables antes de escribir código.",
         "text": "Mejoras funcionales redactadas para que las implementara ingeniería: criterios de aceptación verificables, alcance delimitado y estimación en puntos de historia.",
-        "tags": ["Criterios de aceptación", "Puntos de historia", "Revisión por pares"]
+        "tags": [
+          "Criterios de aceptación",
+          "Puntos de historia",
+          "Revisión por pares"
+        ]
       }
     ]
   }
