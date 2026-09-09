@@ -304,3 +304,11 @@ a:hover { color: var(--mark-deep); }
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }
+
+/* ---------- no-JS fallback ---------- */
+
+.fallback { padding: 8px 0 68px; display: flex; flex-direction: column; gap: var(--space-md); }
+.fallback__lead { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); margin: 0; max-width: 70ch; }
+.fallback__list { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+.fallback__list li { font-size: 14.5px; line-height: 1.6; color: var(--ink-2); }
+.fallback__list a { font-weight: 600; }
