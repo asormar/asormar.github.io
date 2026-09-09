@@ -24,9 +24,11 @@
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 160ms;
   --dur-panel: 420ms;
+  --dur-theme: 900ms;
 
   --wrap: 1000px;
-  --gutter: 48px;
+  --gutter: 52px;
+  --row-pad: 12px;
 }
 
 :root[data-theme="dark"] {
@@ -80,7 +82,8 @@ a:hover { color: var(--mark-deep); }
 
 .masthead {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) auto;
+  grid-template-areas: "name meta theme";
   gap: var(--space-xl);
   align-items: end;
   padding: 46px 0 34px;
@@ -88,6 +91,7 @@ a:hover { color: var(--mark-deep); }
 }
 
 .masthead__name {
+  grid-area: name;
   font-size: 23px;
   font-weight: 700;
   letter-spacing: -0.025em;
@@ -97,6 +101,7 @@ a:hover { color: var(--mark-deep); }
 }
 
 .masthead__meta {
+  grid-area: meta;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -143,10 +148,12 @@ a:hover { color: var(--mark-deep); }
 
 .entry__head {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 2.4fr) minmax(0, 1.05fr) 16px;
-  gap: 20px;
-  width: 100%;
-  padding: 17px 0;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 2.1fr) minmax(0, 1.45fr) 28px;
+  gap: 22px;
+  box-sizing: border-box;
+  width: calc(100% + var(--row-pad) * 2);
+  padding: 17px var(--row-pad);
+  margin-inline: calc(var(--row-pad) * -1);
   align-items: baseline;
   text-align: left;
   background: none;
@@ -278,7 +285,7 @@ a:hover { color: var(--mark-deep); }
 /* ---------- experience ---------- */
 
 .experience { margin-top: 46px; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
-.experience .entry__head { padding: 22px 0; }
+.experience .entry__head { padding: 22px var(--row-pad); }
 .experience .entry__name { font-weight: 700; letter-spacing: -0.015em; }
 
 .areas { display: flex; flex-direction: column; gap: 22px; }
@@ -316,41 +323,91 @@ a:hover { color: var(--mark-deep); }
 /* ---------- responsive ---------- */
 
 @media (max-width: 900px) {
-  :root { --gutter: 32px; }
+  :root { --gutter: 28px; --row-pad: 10px; }
 
-  .masthead { grid-template-columns: minmax(0, 1fr); gap: var(--space-md); align-items: start; }
+  .masthead {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name theme"
+      "meta meta";
+    gap: var(--space-md);
+    align-items: center;
+    padding: 30px 0 24px;
+  }
 
-  /* Touch targets never below 44px */
-  .chip { min-height: 44px; padding: 12px 14px; }
+  .theme { align-self: center; }
+
+  .masthead__name { font-size: 21px; }
+  .masthead__meta { font-size: 12px; line-height: 1.45; }
+
+  .filters { padding: 20px 0 16px; }
+
+  /* One scrolling row beats three wrapped ones: the filters stop pushing the
+     first project below the fold. The strip bleeds into the gutters so it
+     reads as scrollable rather than clipped. */
+  .filters__chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-inline: var(--gutter);
+    margin-inline: calc(var(--gutter) * -1);
+    scroll-padding-inline: var(--gutter);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filters__chips::-webkit-scrollbar { display: none; }
+
+  .chip {
+    flex: none;
+    min-height: 44px;
+    padding: 12px 14px;
+    scroll-snap-align: start;
+  }
 
   .entry__head {
-    grid-template-columns: minmax(0, 1fr) 16px;
+    grid-template-columns: minmax(0, 1fr) 20px;
     grid-template-areas:
       "name sign"
       "summary summary"
       "tags tags";
-    gap: 8px 16px;
-    padding: 18px 0;
+    gap: 7px 14px;
+    padding: 16px var(--row-pad);
     align-items: start;
     min-height: 44px;
   }
 
   .entry__name { grid-area: name; font-size: 15.5px; }
-  .entry__summary { grid-area: summary; }
+  .entry__summary { grid-area: summary; font-size: 13.5px; }
   .entry__tags { grid-area: tags; justify-content: flex-start; }
-  .sign { grid-area: sign; }
+  .sign { grid-area: sign; margin-top: 3px; }
 
-  .entry__panel { grid-template-columns: minmax(0, 1fr); gap: 0; }
-  .entry__panel > .entry__spacer { display: none; }
+  .experience { margin-top: 34px; }
+  .experience .entry__head { padding: 18px var(--row-pad); }
+
+  .panel__body { padding-bottom: 24px; gap: 16px; }
+  .entry__detail { font-size: 14px; }
 
   .metrics { width: 100%; }
-  .metric { flex-grow: 1; }
+  .metric { flex-grow: 1; min-width: 96px; padding: 11px 14px; }
+  .metric__value { font-size: 16px; }
+
+  .areas { gap: 26px; }
+  .area__head { gap: 6px 12px; }
+  .area__lead { font-size: 13px; }
+
+  .contact { gap: 18px; padding: 24px 0 56px; }
 }
 
 @media (max-width: 420px) {
-  :root { --gutter: 20px; }
-  .masthead__name { font-size: 20px; }
-  .contact { gap: 14px; }
+  :root { --gutter: 20px; --row-pad: 8px; }
+
+  .masthead__name { font-size: 19px; letter-spacing: -0.02em; }
+  .masthead__meta { font-size: 11.5px; }
+  .theme { width: 42px; height: 42px; }
+  .theme__icon { width: 19px; height: 19px; }
+
+  .entry__summary { font-size: 13px; }
+  .metric { min-width: 84px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -375,53 +432,75 @@ a:hover { color: var(--mark-deep); }
 /* ---------- theme toggle ---------- */
 
 .theme {
+  grid-area: theme;
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  flex: none;
+  align-self: end;
+  width: 46px;
+  height: 46px;
   padding: 0;
   border: 1px solid var(--rule);
+  border-radius: 50%;
   background: var(--paper);
   color: var(--ink-2);
   cursor: pointer;
-  transition: border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    transform 240ms var(--ease-spring);
 }
 
-.theme:hover { border-color: var(--ink-3); color: var(--ink); }
+.theme:hover {
+  border-color: var(--ink-3);
+  color: var(--ink);
+  background: var(--paper-2);
+}
+
+.theme:active { transform: scale(0.93); }
 
 .theme__icon {
-  width: 19px;
-  height: 19px;
+  width: 21px;
+  height: 21px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.6;
+  stroke-width: 1.7;
   stroke-linecap: round;
+  overflow: visible;
+  transition: transform var(--dur-theme) var(--ease-spring);
 }
 
-/* Sun in light mode; the orb slides and swells into a crescent for dark. */
+:root[data-theme="dark"] .theme__icon { transform: rotate(-115deg); }
+
 .theme__orb {
-  transform-origin: center;
-  transition: transform 520ms var(--ease-spring);
+  fill: none;
+  transition: r var(--dur-theme) var(--ease-spring);
 }
+
+:root[data-theme="dark"] .theme__orb { r: 7.4; }
+
+/* The cut disc lives off-canvas in light mode and slides in to bite the
+   crescent out of the orb. */
+.theme__cut {
+  fill: black;
+  transform: translate(11px, -9px);
+  transition: transform var(--dur-theme) var(--ease-spring);
+}
+
+:root[data-theme="dark"] .theme__cut { transform: translate(5.5px, -5px); }
 
 .theme__rays {
-  transform-origin: center;
-  transition: transform 520ms var(--ease-spring), opacity 260ms var(--ease-out);
+  transform-origin: 12px 12px;
+  transition:
+    transform var(--dur-theme) var(--ease-spring),
+    opacity calc(var(--dur-theme) * 0.45) var(--ease-out);
 }
 
-:root[data-theme="dark"] .theme__orb { transform: translate(4px, -3px) scale(1.45); }
-:root[data-theme="dark"] .theme__rays { transform: rotate(50deg) scale(0.6); opacity: 0; }
-
-/* The crescent is cut by a second disc painted in the page colour. */
-.theme__moon {
-  fill: var(--paper);
-  stroke: none;
+:root[data-theme="dark"] .theme__rays {
+  transform: rotate(70deg) scale(0.45);
   opacity: 0;
-  transform: translate(3px, -4px);
-  transition: opacity 300ms var(--ease-out);
 }
-
-:root[data-theme="dark"] .theme__moon { opacity: 1; }
 
 /* ---------- theme reveal ---------- */
 
@@ -442,7 +521,7 @@ a:hover { color: var(--mark-deep); }
 }
 
 ::view-transition-new(root) {
-  animation: reveal 620ms var(--ease-spring);
+  animation: reveal var(--dur-theme) var(--ease-spring);
 }
 
 /* ---------- first paint ---------- */

@@ -86,26 +86,34 @@ function toggleTheme(event) {
   document.startViewTransition(() => applyTheme(next));
 }
 
-function sunIcon() {
+// Sun and moon are the same disc. In dark mode a second disc slides across it
+// through an SVG mask, carving a real crescent — an overlay painted in the page
+// colour would break the moment the button gets a hover fill.
+function themeIcon() {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "0 0 24 24");
   svg.setAttribute("aria-hidden", "true");
   svg.classList.add("theme__icon");
   svg.innerHTML =
-    '<circle class="theme__orb" cx="12" cy="12" r="5"/>' +
-    '<circle class="theme__moon" cx="12" cy="12" r="5"/>' +
+    "<defs>" +
+    '<mask id="theme-crescent">' +
+    '<rect x="0" y="0" width="24" height="24" fill="white"/>' +
+    '<circle class="theme__cut" cx="12" cy="12" r="7"/>' +
+    "</mask>" +
+    "</defs>" +
+    '<circle class="theme__orb" cx="12" cy="12" r="5.2" mask="url(#theme-crescent)"/>' +
     '<g class="theme__rays">' +
-    '<line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/>' +
-    '<line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/>' +
-    '<line x1="4.4" y1="4.4" x2="6.2" y2="6.2"/><line x1="17.8" y1="17.8" x2="19.6" y2="19.6"/>' +
-    '<line x1="4.4" y1="19.6" x2="6.2" y2="17.8"/><line x1="17.8" y1="6.2" x2="19.6" y2="4.4"/>' +
+    '<line x1="12" y1="1.6" x2="12" y2="3.9"/><line x1="12" y1="20.1" x2="12" y2="22.4"/>' +
+    '<line x1="1.6" y1="12" x2="3.9" y2="12"/><line x1="20.1" y1="12" x2="22.4" y2="12"/>' +
+    '<line x1="4.6" y1="4.6" x2="6.2" y2="6.2"/><line x1="17.8" y1="17.8" x2="19.4" y2="19.4"/>' +
+    '<line x1="4.6" y1="19.4" x2="6.2" y2="17.8"/><line x1="17.8" y1="6.2" x2="19.4" y2="4.6"/>' +
     "</g>";
   return svg;
 }
 
 function buildThemeToggle() {
   const btn = $("theme");
-  btn.append(sunIcon());
+  btn.append(themeIcon());
   btn.addEventListener("click", toggleTheme);
   applyTheme(storedTheme() || systemTheme());
 }
