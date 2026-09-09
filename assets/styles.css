@@ -5,7 +5,7 @@
   --paper-2: oklch(94% 0.003 250);
   --ink: oklch(18% 0.004 250);
   --ink-2: oklch(46% 0.006 250);
-  --ink-3: oklch(64% 0.006 250);
+  --ink-3: oklch(52% 0.008 250);
   --mark: oklch(53% 0.205 27);
   --mark-deep: oklch(43% 0.205 27);
   --rule: oklch(89% 0.003 250);
@@ -33,7 +33,7 @@
     --paper-2: oklch(21% 0.005 250);
     --ink: oklch(95% 0.003 250);
     --ink-2: oklch(72% 0.006 250);
-    --ink-3: oklch(55% 0.008 250);
+    --ink-3: oklch(62% 0.010 250);
     --mark: oklch(70% 0.165 27);
     --mark-deep: oklch(80% 0.14 27);
     --rule: oklch(30% 0.005 250);
@@ -269,7 +269,6 @@ a:hover { color: var(--mark-deep); }
 
   /* Touch targets never below 44px */
   .chip { min-height: 44px; padding: 12px 14px; }
-  .entry__head { padding: 20px 0; }
 
   .entry__head {
     grid-template-columns: minmax(0, 1fr) 22px;
@@ -278,7 +277,7 @@ a:hover { color: var(--mark-deep); }
       "summary summary"
       "tags tags";
     gap: 8px 16px;
-    padding: 16px 0;
+    padding: 18px 0;
     align-items: start;
     min-height: 44px;
   }
