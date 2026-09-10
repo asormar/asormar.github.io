@@ -128,6 +128,125 @@ function signIcon() {
   return sign;
 }
 
+/* ---------------- project visuals ---------------- */
+
+const svgNode = (markup, viewBox) => {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", viewBox);
+  svg.setAttribute("role", "img");
+  svg.classList.add("viz__svg");
+  svg.innerHTML = markup;
+  return svg;
+};
+
+// Each diagram draws what the repo actually does. Nothing here is decorative:
+// every label and number comes from that project's own source or README.
+const DIAGRAMS = {
+  // Rolling-origin validation: the training window grows, the tested season
+  // always sits to its right, so no fold ever sees its own future.
+  "rolling-origin": () => {
+    const unit = 30;
+    const rows = [5, 6, 7, 8]
+      .map((train, i) => {
+        const y = 6 + i * 26;
+        const w = train * unit;
+        return (
+          `<rect class="viz-track" x="0" y="${y}" width="${10 * unit}" height="14" rx="2"/>` +
+          `<rect class="viz-fill-3" x="0" y="${y}" width="${w}" height="14" rx="2"/>` +
+          `<rect class="viz-fill-mark" x="${w + 3}" y="${y}" width="${unit - 3}" height="14" rx="2"/>`
+        );
+      })
+      .join("");
+    return svgNode(
+      rows +
+        '<text class="viz__label" x="0" y="126">temporadas usadas para entrenar</text>' +
+        `<rect class="viz-fill-mark" x="196" y="118" width="9" height="9" rx="2"/>` +
+        '<text class="viz__label" x="210" y="126">la que se predice</text>',
+      "0 0 300 134"
+    );
+  },
+
+  // 75.000 catalogue -> 13.105 verified indies. Widths are to scale.
+  funnel: () => {
+    const full = 300;
+    const kept = Math.round((13105 / 75000) * full);
+    return svgNode(
+      `<rect class="viz-fill-3" x="0" y="16" width="${full}" height="22" rx="2"/>` +
+        `<text class="viz__num viz-text-ink" x="0" y="11">75.000</text>` +
+        `<text class="viz__label" x="52" y="11">juegos del catálogo</text>` +
+        `<path class="viz-stroke-3" d="M0 42 L0 56 M${full} 42 L${kept} 56" fill="none" stroke-dasharray="3 3"/>` +
+        `<rect class="viz-fill-mark" x="0" y="58" width="${kept}" height="22" rx="2"/>` +
+        `<text class="viz__num viz-text-mark" x="0" y="96">13.105</text>` +
+        `<text class="viz__label" x="52" y="96">indies verificados que entrenan el modelo</text>`,
+      "0 0 300 104"
+    );
+  },
+
+  // The four components and the ports they actually listen on.
+  drm: () => {
+    const box = (x, y, w, label, sub) =>
+      `<rect class="viz-box" x="${x}" y="${y}" width="${w}" height="34" rx="3"/>` +
+      `<text class="viz__label viz-text-ink" x="${x + 10}" y="${y + 15}">${label}</text>` +
+      `<text class="viz__label" x="${x + 10}" y="${y + 27}">${sub}</text>`;
+    return svgNode(
+      box(0, 36, 92, "User Agent", "UA.py") +
+        box(150, 0, 118, "Servidor de", "contenidos · 6001") +
+        box(150, 44, 118, "Servidor de", "licencias · 7002") +
+        box(150, 88, 118, "CDM", "descifra y marca") +
+        '<path class="viz-stroke-3" d="M92 53 H124 V17 H150" fill="none"/>' +
+        '<path class="viz-stroke-mark" d="M92 55 H150" fill="none"/>' +
+        '<path class="viz-stroke-3" d="M92 57 H124 V105 H150" fill="none"/>',
+      "0 0 340 128"
+    );
+  },
+
+  // Text decomposes into phonemes before anything is heard.
+  phonemes: () => {
+    const parts = ["ho", "la", "mun", "do"];
+    let x = 0;
+    const chips = parts
+      .map((p, i) => {
+        const w = 26 + p.length * 11;
+        const node =
+          `<rect class="${i === 1 ? "viz-fill-mark" : "viz-box"}" x="${x}" y="44" width="${w}" height="28" rx="3"/>` +
+          `<text class="viz__label ${i === 1 ? "viz-text-paper" : "viz-text-ink"}" x="${x + 12}" y="62">${p}</text>`;
+        x += w + 8;
+        return node;
+      })
+      .join("");
+    return svgNode(
+      '<text class="viz__num viz-text-ink" x="0" y="22">hola mundo</text>' +
+        '<path class="viz-stroke-3" d="M8 30 V40" fill="none" stroke-dasharray="2 3"/>' +
+        chips +
+        '<text class="viz__label" x="0" y="92">41 fonemas cubren el español</text>',
+      "0 0 340 100"
+    );
+  }
+};
+
+function buildVisual(v) {
+  if (!v) return null;
+  const fig = el("figure", "viz");
+
+  if (v.kind === "image") {
+    const img = el("img", "viz__img");
+    img.src = v.src;
+    img.alt = v.alt || "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    fig.append(img);
+  } else if (v.kind === "svg" && DIAGRAMS[v.id]) {
+    const svg = DIAGRAMS[v.id]();
+    svg.setAttribute("aria-label", v.caption || "");
+    fig.append(svg);
+  } else {
+    return null;
+  }
+
+  if (v.caption) fig.append(el("figcaption", "viz__caption", v.caption));
+  return fig;
+}
+
 function tagList(items, className) {
   const box = el("span", className);
   for (const t of items) box.append(el("span", "tag", t));
@@ -188,7 +307,7 @@ function renderChips() {
   for (const a of areas) box.append(make(a, a));
 }
 
-function buildEntry({ name, summary, tags, detail, metrics, links, id }) {
+function buildEntry({ name, summary, tags, detail, metrics, links, visual, id }) {
   const entry = el("div", "entry");
   entry.dataset.id = id;
 
@@ -209,6 +328,9 @@ function buildEntry({ name, summary, tags, detail, metrics, links, id }) {
   const body = el("div", "panel__body");
 
   if (detail) body.append(el("p", "entry__detail", detail));
+
+  const viz = buildVisual(visual);
+  if (viz) body.append(viz);
 
   if (metrics && metrics.length) {
     const box = el("div", "metrics");
@@ -294,6 +416,7 @@ function renderIndex() {
       tags: p.tech,
       detail: p.detail,
       metrics: p.metrics,
+      visual: p.visual,
       links
     });
 

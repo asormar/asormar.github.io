@@ -32,12 +32,12 @@
       "repo": "superlega-simulator",
       "year": "2026",
       "area": "Machine learning",
-      "summary": "Predicción y simulación de la liga italiana de voleibol.",
+      "summary": "Predice partidos de voleibol sin dejar que el modelo mire al futuro.",
       "tech": [
         "Python",
         "scikit-learn"
       ],
-      "detail": "Rating Elo con margen, regresión Ridge de seis variables y simulador de cadena de Markov por Monte Carlo, sobre 1.322 partidos de diez temporadas. Todas las variables se construyen solo con información anterior al partido que se predice, y la evaluación usa origen móvil. Trabajo de Fin de Grado.",
+      "detail": "Tres piezas encadenadas sobre 1.322 partidos de diez temporadas: un rating Elo con margen que resume la fuerza de cada equipo, una regresión Ridge de seis variables que la traduce en probabilidad de ganar un punto, y una cadena de Markov que reproduce el partido punto a punto por Monte Carlo. La disciplina está en la evaluación: todas las variables se construyen solo con información anterior al partido, con validación de origen móvil, y publico el Brier además del acierto porque el acierto solo es la métrica de quien quiere impresionar.",
       "metrics": [
         {
           "value": "0,7624",
@@ -52,13 +52,18 @@
           "label": "log-loss"
         },
         {
-          "value": "314",
-          "label": "partidos en test"
+          "value": "0,0315",
+          "label": "distancia L1 de marcadores"
         }
       ],
       "extra": {
         "label": "memoria técnica →",
         "href": "https://github.com/asormar/superlega-simulator/tree/main/memoria"
+      },
+      "visual": {
+        "kind": "svg",
+        "id": "rolling-origin",
+        "caption": "Validación de origen móvil: cada predicción solo ve el pasado."
       }
     },
     {
@@ -66,130 +71,203 @@
       "display": "videogame-predictor",
       "year": "2026",
       "area": "Machine learning",
-      "summary": "Viabilidad comercial de juegos indie en Steam.",
+      "summary": "Clasifica el éxito de un indie en Steam antes de que salga.",
       "tech": [
         "Python",
         "LightGBM"
       ],
-      "detail": "Clasificador de éxito comercial entrenado sobre más de 13.000 títulos reales, usando únicamente señales previas al lanzamiento: género, etiquetas, precio, localización y presencia en tienda. Cuatro modelos comparados; LightGBM en producción.",
+      "detail": "Parte de un catálogo de más de 75.000 juegos y lo filtra hasta 13.105 títulos indie verificados con volumen de reseñas suficiente, descartando los superventas que distorsionarían el modelo. Clasifica en tres niveles —fracaso, éxito moderado y éxito alto— usando exclusivamente señales disponibles antes del lanzamiento: género, etiquetas, precio, idiomas y presencia en tienda. Nunca lee reseñas ni jugadores posteriores, que es justo por donde se cuela la fuga de datos en este tipo de problema. Cuatro modelos comparados en igualdad de condiciones.",
       "metrics": [
         {
-          "value": "13.000",
-          "label": "títulos"
+          "value": "75.000",
+          "label": "catálogo de partida"
+        },
+        {
+          "value": "13.105",
+          "label": "indies verificados"
         },
         {
           "value": "4",
           "label": "modelos comparados"
+        },
+        {
+          "value": "3",
+          "label": "clases"
         }
       ],
-      "extra": null
+      "extra": null,
+      "visual": {
+        "kind": "svg",
+        "id": "funnel",
+        "caption": "Del catálogo bruto al conjunto de entrenamiento."
+      }
     },
     {
       "repo": "AI-Sign-Language-Detector",
       "display": "sign-language-detector",
       "year": "2026",
       "area": "Machine learning",
-      "summary": "Reconocimiento de lengua de signos por cámara.",
+      "summary": "Lee el alfabeto de signos por webcam y lo dice con tu propia voz.",
       "tech": [
         "Python",
         "OpenCV"
       ],
-      "detail": "Identificación de lengua de signos a través de la cámara del ordenador, con clasificación de imagen y una capa de síntesis de voz que lee en alto las palabras reconocidas.",
+      "detail": "Clasificación de imagen sobre el alfabeto de la lengua de signos americana capturado por la cámara, con gestos reservados para los caracteres que no son letras: la mano abierta introduce un espacio y el pulgar hacia arriba cambia de modo. Al terminar, una capa de síntesis de voz graba veinte segundos de tu micrófono, construye un modelo de tu voz y lee en alto el texto que acabas de deletrear.",
       "metrics": [
         {
+          "value": "ASL",
+          "label": "alfabeto reconocido"
+        },
+        {
+          "value": "20 s",
+          "label": "para clonar la voz"
+        },
+        {
           "value": "tiempo real",
-          "label": "inferencia"
+          "label": "clasificación por cámara"
         }
       ],
-      "extra": null
+      "extra": null,
+      "visual": {
+        "kind": "image",
+        "src": "./assets/projects/asl.png",
+        "alt": "Diccionario del alfabeto de la lengua de signos americana.",
+        "caption": "El alfabeto que el clasificador aprende a distinguir."
+      }
     },
     {
       "repo": "chip8-emulator",
       "year": "2026",
       "area": "Sistemas y bajo nivel",
-      "summary": "Emulación completa de la máquina virtual CHIP-8.",
+      "summary": "Emula una máquina de los setenta hasta el pitido.",
       "tech": [
         "C++17",
         "SDL2"
       ],
-      "detail": "Intérprete del set completo de opcodes de CHIP-8, con display de 64×32, timers de sonido y retardo, y teclado de 16 teclas. Escrito desde cero para entender qué hace una máquina cuando nadie la abstrae.",
+      "detail": "Intérprete de los 34 opcodes originales de CHIP-8 escrito desde cero en C++17: gestión de memoria a bajo nivel, operaciones de bits, dibujado por XOR con detección de colisión y renderizado en tiempo real con SDL2. Los dos temporizadores corren a 60 Hz y el de sonido dispara una onda cuadrada de 440 Hz, así que el pitido no está grabado: se sintetiza. La CPU va a unos 700 opcodes por segundo, ajustable.",
       "metrics": [
         {
-          "value": "35",
-          "label": "instrucciones"
+          "value": "34",
+          "label": "opcodes"
         },
         {
           "value": "64×32",
-          "label": "display"
+          "label": "píxeles"
         },
         {
-          "value": "16",
-          "label": "teclas"
+          "value": "440 Hz",
+          "label": "onda cuadrada"
+        },
+        {
+          "value": "~700/s",
+          "label": "opcodes"
         }
       ],
-      "extra": null
+      "extra": null,
+      "visual": {
+        "kind": "image",
+        "src": "./assets/projects/chip8.gif",
+        "alt": "El emulador ejecutando una ROM de CHIP-8.",
+        "caption": "El emulador corriendo una ROM real."
+      }
     },
     {
       "repo": "DRM-Content-Protection",
       "display": "drm-content-protection",
       "year": "2025",
       "area": "Sistemas y bajo nivel",
-      "summary": "Protección de contenido multimedia.",
+      "summary": "Un ecosistema de protección de contenido, con sus cuatro piezas hablando por sockets.",
       "tech": [
         "Python"
       ],
-      "detail": "Ecosistema completo de protección de contenido multimedia que simula un sistema de gestión de derechos digitales mediante técnicas criptográficas.",
+      "detail": "Reproduce cómo funciona por dentro un sistema de gestión de derechos digitales: el contenido viaja cifrado con AES-256, la clave se intercambia con RSA de 1024 bits, un servidor de licencias decide quién puede descifrar y un módulo CDM imita el papel que cumplen Widevine o PlayReady. Cada copia entregada lleva además una marca de agua dinámica ligada al identificador único de la máquina, de modo que una filtración es rastreable hasta el equipo que la produjo.",
       "metrics": [
         {
-          "value": "criptografía",
-          "label": "aplicada"
+          "value": "AES-256",
+          "label": "cifrado de contenido"
+        },
+        {
+          "value": "RSA-1024",
+          "label": "intercambio de claves"
+        },
+        {
+          "value": "4",
+          "label": "componentes por TCP"
         }
       ],
-      "extra": null
+      "extra": null,
+      "visual": {
+        "kind": "svg",
+        "id": "drm",
+        "caption": "Los cuatro componentes y cómo se hablan."
+      }
     },
     {
       "repo": "Cartelera_cine",
       "display": "cartelera-cine",
       "year": "2026",
       "area": "Web y automatización",
-      "summary": "Boletín de cartelera automatizado.",
+      "summary": "Un boletín que lleva meses enviándose solo, sin servidor.",
       "tech": [
         "JavaScript",
         "Puppeteer",
         "GitHub Actions"
       ],
-      "detail": "Sistema que extrae la cartelera de cine y compone y envía un boletín en HTML dos veces por semana, sin intervención. Corre entero sobre GitHub Actions.",
+      "detail": "Puppeteer abre la cartelera, extrae las sesiones y compone un correo en HTML que sale dos veces por semana. Lo interesante no es el scraping sino dónde vive: entero sobre GitHub Actions, sin servidor que mantener ni factura que pagar. Se programó, se olvidó, y siguió funcionando.",
       "metrics": [
         {
-          "value": "2 / semana",
-          "label": "envíos"
+          "value": "20",
+          "label": "envíos ejecutados"
         },
         {
-          "value": "20",
-          "label": "ejecuciones"
+          "value": "2 / semana",
+          "label": "frecuencia"
+        },
+        {
+          "value": "0",
+          "label": "servidores"
         }
       ],
-      "extra": null
+      "extra": null,
+      "visual": {
+        "kind": "image",
+        "src": "./assets/projects/cartelera.png",
+        "alt": "El boletín de cartelera recibido por correo.",
+        "caption": "Uno de los envíos, tal y como llega."
+      }
     },
     {
       "repo": "VoiceGen",
       "display": "voicegen",
       "year": "2026",
       "area": "Web y automatización",
-      "summary": "La evolución de la síntesis de voz, en interactivo.",
+      "summary": "Un motor de síntesis de voz escrito a mano, para poder compararlo con los buenos.",
       "tech": [
         "JavaScript"
       ],
-      "detail": "Aplicación educativa que recorre cómo ha progresado la conversión de texto a voz, desde los métodos concatenativos tradicionales hasta las técnicas neuronales modernas.",
+      "detail": "Implementa un sintetizador concatenativo completo en JavaScript sobre la Web Audio API, con los 41 fonemas del español —vocales, diptongos y consonantes— y visualización en vivo de cómo el texto se descompone en fonemas antes de sonar. Al lado, los mismos textos generados con técnicas neuronales, para que la diferencia se oiga en vez de explicarse.",
       "metrics": [
         {
-          "value": "concatenativa → neuronal",
-          "label": "recorrido"
+          "value": "41",
+          "label": "fonemas del español"
+        },
+        {
+          "value": "3",
+          "label": "técnicas comparadas"
+        },
+        {
+          "value": "Web Audio",
+          "label": "síntesis en navegador"
         }
       ],
       "extra": {
         "label": "abrir →",
         "href": "https://manuelric.github.io/proyecto_voz/"
+      },
+      "visual": {
+        "kind": "svg",
+        "id": "phonemes",
+        "caption": "Del texto al fonema, que es donde se decide el resultado."
       }
     }
   ],

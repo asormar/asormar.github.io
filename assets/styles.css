@@ -387,6 +387,7 @@ a:hover { color: var(--mark-deep); }
   .panel__body { padding-bottom: 24px; gap: 16px; }
   .entry__detail { font-size: 14px; }
 
+  .viz { max-width: 100%; }
   .metrics { width: 100%; }
   .metric { flex-grow: 1; min-width: 96px; padding: 11px 14px; }
   .metric__value { font-size: 16px; }
@@ -532,4 +533,61 @@ body.is-ready { opacity: 1; transition: opacity 260ms var(--ease-out); }
 @media (prefers-reduced-motion: reduce) {
   body, body.is-ready { opacity: 1; transition: none; }
   ::view-transition-new(root) { animation: none; }
+}
+
+/* ---------- project visuals ---------- */
+
+.viz {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-width: 420px;
+}
+
+.viz__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+  background: var(--paper-2);
+}
+
+.viz__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.viz__caption {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+/* Diagram tokens — the palette is the page's, never a one-off */
+.viz-fill-2   { fill: var(--ink-2); }
+.viz-fill-3   { fill: var(--ink-3); }
+.viz-fill-mark{ fill: var(--mark); }
+.viz-box      { fill: none; stroke: var(--rule); stroke-width: 1; }
+.viz-track    { fill: var(--rule); opacity: 0.45; }
+.viz-stroke-3 { stroke: var(--ink-3); stroke-width: 1; }
+.viz-stroke-mark { stroke: var(--mark); stroke-width: 1.5; }
+.viz-text-ink { fill: var(--ink); }
+.viz-text-mark { fill: var(--mark); }
+.viz-text-paper { fill: var(--paper); }
+
+.viz__label {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  fill: var(--ink-3);
+}
+
+.viz__num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  fill: var(--ink);
 }
