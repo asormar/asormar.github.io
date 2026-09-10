@@ -144,25 +144,46 @@ const svgNode = (markup, viewBox) => {
 const DIAGRAMS = {
   // Rolling-origin validation: the training window grows, the tested season
   // always sits to its right, so no fold ever sees its own future.
+  // Ten seasons, 2016/17 to 2025/26. The training window grows season by
+  // season and the one being predicted always sits just outside it.
   "rolling-origin": () => {
+    const seasons = ["16/17", "17/18", "18/19", "19/20", "20/21", "21/22", "22/23", "23/24", "24/25", "25/26"];
     const unit = 30;
-    const rows = [5, 6, 7, 8]
+    const width = seasons.length * unit;
+
+    const rows = [5, 6, 7, 8, 9]
       .map((train, i) => {
-        const y = 6 + i * 26;
+        const y = 4 + i * 21;
         const w = train * unit;
         return (
-          `<rect class="viz-track" x="0" y="${y}" width="${10 * unit}" height="14" rx="2"/>` +
-          `<rect class="viz-fill-3" x="0" y="${y}" width="${w}" height="14" rx="2"/>` +
-          `<rect class="viz-fill-mark" x="${w + 3}" y="${y}" width="${unit - 3}" height="14" rx="2"/>`
+          `<rect class="viz-track" x="0" y="${y}" width="${width}" height="13" rx="2"/>` +
+          `<rect class="viz-fill-3" x="0" y="${y}" width="${w - 2}" height="13" rx="2"/>` +
+          `<rect class="viz-fill-mark" x="${w + 2}" y="${y}" width="${unit - 4}" height="13" rx="2"/>`
         );
       })
       .join("");
+
+    const axisY = 4 + 5 * 21 + 4;
+    const ticks = seasons
+      .map((s, i) => {
+        const x = i * unit;
+        const shown = i % 3 === 0 || i === seasons.length - 1;
+        return (
+          `<path class="viz-stroke-3" d="M${x} ${axisY} V${axisY + 4}" fill="none" opacity="${shown ? 1 : 0.4}"/>` +
+          (shown ? `<text class="viz__tick" x="${x + 2}" y="${axisY + 15}">${s}</text>` : "")
+        );
+      })
+      .join("");
+
     return svgNode(
       rows +
-        '<text class="viz__label" x="0" y="126">temporadas usadas para entrenar</text>' +
-        `<rect class="viz-fill-mark" x="196" y="118" width="9" height="9" rx="2"/>` +
-        '<text class="viz__label" x="210" y="126">la que se predice</text>',
-      "0 0 300 134"
+        `<path class="viz-stroke-3" d="M0 ${axisY} H${width}" fill="none"/>` +
+        ticks +
+        `<rect class="viz-fill-3" x="0" y="${axisY + 26}" width="9" height="9" rx="2"/>` +
+        `<text class="viz__label" x="14" y="${axisY + 34}">entrena</text>` +
+        `<rect class="viz-fill-mark" x="72" y="${axisY + 26}" width="9" height="9" rx="2"/>` +
+        `<text class="viz__label" x="86" y="${axisY + 34}">predice</text>`,
+      `0 0 ${width} ${axisY + 42}`
     );
   },
 

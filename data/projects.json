@@ -37,7 +37,7 @@
         "Python",
         "scikit-learn"
       ],
-      "detail": "Tres piezas encadenadas sobre 1.322 partidos de diez temporadas: un rating Elo con margen que resume la fuerza de cada equipo, una regresión Ridge de seis variables que la traduce en probabilidad de ganar un punto, y una cadena de Markov que reproduce el partido punto a punto por Monte Carlo. La disciplina está en la evaluación: todas las variables se construyen solo con información anterior al partido, con validación de origen móvil, y publico el Brier además del acierto porque el acierto solo es la métrica de quien quiere impresionar.",
+      "detail": "Tres piezas encadenadas sobre 1.322 partidos de diez temporadas: un rating Elo con margen que resume la fuerza de cada equipo, una regresión Ridge de seis variables que la traduce en probabilidad de ganar un punto, y una cadena de Markov que reproduce el partido punto a punto por Monte Carlo. Todas las variables se construyen solo con información anterior al partido y la evaluación usa origen móvil, así que ningún pliegue llega a ver su propio futuro. Publico el Brier junto al acierto porque el acierto solo premia acertar el ganador, no calibrar la probabilidad.",
       "metrics": [
         {
           "value": "0,7624",
@@ -63,7 +63,7 @@
       "visual": {
         "kind": "svg",
         "id": "rolling-origin",
-        "caption": "Validación de origen móvil: cada predicción solo ve el pasado."
+        "caption": "Origen móvil sobre las diez temporadas: la ventana de entrenamiento crece y la temporada que se predice queda siempre fuera. La última, 2025/26, es la reservada para test."
       }
     },
     {
@@ -76,7 +76,7 @@
         "Python",
         "LightGBM"
       ],
-      "detail": "Parte de un catálogo de más de 75.000 juegos y lo filtra hasta 13.105 títulos indie verificados con volumen de reseñas suficiente, descartando los superventas que distorsionarían el modelo. Clasifica en tres niveles —fracaso, éxito moderado y éxito alto— usando exclusivamente señales disponibles antes del lanzamiento: género, etiquetas, precio, idiomas y presencia en tienda. Nunca lee reseñas ni jugadores posteriores, que es justo por donde se cuela la fuga de datos en este tipo de problema. Cuatro modelos comparados en igualdad de condiciones.",
+      "detail": "Parte de un catálogo de más de 75.000 juegos y lo filtra hasta 13.105 títulos indie verificados con volumen de reseñas suficiente, descartando los superventas que distorsionarían el modelo. Clasifica en tres niveles (fracaso, éxito moderado y éxito alto) usando solo señales disponibles antes del lanzamiento: género, etiquetas, precio, idiomas y presencia en tienda. No lee reseñas ni recuentos de jugadores posteriores, que son la vía habitual de fuga de datos en este problema. Cuatro modelos entrenados sobre el mismo conjunto y comparados entre sí.",
       "metrics": [
         {
           "value": "75.000",
@@ -112,7 +112,7 @@
         "Python",
         "OpenCV"
       ],
-      "detail": "Clasificación de imagen sobre el alfabeto de la lengua de signos americana capturado por la cámara, con gestos reservados para los caracteres que no son letras: la mano abierta introduce un espacio y el pulgar hacia arriba cambia de modo. Al terminar, una capa de síntesis de voz graba veinte segundos de tu micrófono, construye un modelo de tu voz y lee en alto el texto que acabas de deletrear.",
+      "detail": "Clasificación de imagen sobre el alfabeto de la lengua de signos americana capturado por la cámara, con gestos reservados para lo que no son letras: la mano abierta introduce un espacio y el pulgar hacia arriba cambia de modo. Al terminar, una capa de síntesis de voz graba veinte segundos de tu micrófono, construye un modelo de tu voz y lee en alto el texto que acabas de deletrear.",
       "metrics": [
         {
           "value": "ASL",
@@ -128,12 +128,7 @@
         }
       ],
       "extra": null,
-      "visual": {
-        "kind": "image",
-        "src": "./assets/projects/asl.png",
-        "alt": "Diccionario del alfabeto de la lengua de signos americana.",
-        "caption": "El alfabeto que el clasificador aprende a distinguir."
-      }
+      "visual": null
     },
     {
       "repo": "chip8-emulator",
@@ -144,7 +139,7 @@
         "C++17",
         "SDL2"
       ],
-      "detail": "Intérprete de los 34 opcodes originales de CHIP-8 escrito desde cero en C++17: gestión de memoria a bajo nivel, operaciones de bits, dibujado por XOR con detección de colisión y renderizado en tiempo real con SDL2. Los dos temporizadores corren a 60 Hz y el de sonido dispara una onda cuadrada de 440 Hz, así que el pitido no está grabado: se sintetiza. La CPU va a unos 700 opcodes por segundo, ajustable.",
+      "detail": "Intérprete de los 34 opcodes originales de CHIP-8 escrito desde cero en C++17, con gestión de memoria a bajo nivel, operaciones de bits, dibujado por XOR con detección de colisión y renderizado en tiempo real sobre SDL2. Los dos temporizadores corren a 60 Hz y el de sonido sintetiza una onda cuadrada de 440 Hz, en vez de reproducir un pitido grabado. La CPU ejecuta unos 700 opcodes por segundo y el ritmo se ajusta en el código.",
       "metrics": [
         {
           "value": "34",
@@ -180,7 +175,7 @@
       "tech": [
         "Python"
       ],
-      "detail": "Reproduce cómo funciona por dentro un sistema de gestión de derechos digitales: el contenido viaja cifrado con AES-256, la clave se intercambia con RSA de 1024 bits, un servidor de licencias decide quién puede descifrar y un módulo CDM imita el papel que cumplen Widevine o PlayReady. Cada copia entregada lleva además una marca de agua dinámica ligada al identificador único de la máquina, de modo que una filtración es rastreable hasta el equipo que la produjo.",
+      "detail": "Reproduce cómo funciona por dentro un sistema de gestión de derechos digitales. El contenido viaja cifrado con AES-256, la clave se intercambia con RSA de 1024 bits, un servidor de licencias decide quién puede descifrar y un módulo CDM cumple el papel de Widevine o PlayReady. Cada copia lleva una marca de agua ligada al identificador de la máquina, así que una filtración se rastrea hasta el equipo que la produjo.",
       "metrics": [
         {
           "value": "AES-256",
@@ -207,13 +202,13 @@
       "display": "cartelera-cine",
       "year": "2026",
       "area": "Web y automatización",
-      "summary": "Un boletín que lleva meses enviándose solo, sin servidor.",
+      "summary": "Un boletín de cine que se envía solo, sin servidor detrás.",
       "tech": [
         "JavaScript",
         "Puppeteer",
         "GitHub Actions"
       ],
-      "detail": "Puppeteer abre la cartelera, extrae las sesiones y compone un correo en HTML que sale dos veces por semana. Lo interesante no es el scraping sino dónde vive: entero sobre GitHub Actions, sin servidor que mantener ni factura que pagar. Se programó, se olvidó, y siguió funcionando.",
+      "detail": "Puppeteer abre la cartelera, extrae las sesiones y compone un correo en HTML que sale dos veces por semana. Corre entero sobre GitHub Actions, sin servidor que mantener ni factura que pagar: el planificador de Actions dispara el trabajo, el navegador headless hace el scraping y el envío sale desde el mismo runner.",
       "metrics": [
         {
           "value": "20",
@@ -229,12 +224,7 @@
         }
       ],
       "extra": null,
-      "visual": {
-        "kind": "image",
-        "src": "./assets/projects/cartelera.png",
-        "alt": "El boletín de cartelera recibido por correo.",
-        "caption": "Uno de los envíos, tal y como llega."
-      }
+      "visual": null
     },
     {
       "repo": "VoiceGen",
@@ -245,7 +235,7 @@
       "tech": [
         "JavaScript"
       ],
-      "detail": "Implementa un sintetizador concatenativo completo en JavaScript sobre la Web Audio API, con los 41 fonemas del español —vocales, diptongos y consonantes— y visualización en vivo de cómo el texto se descompone en fonemas antes de sonar. Al lado, los mismos textos generados con técnicas neuronales, para que la diferencia se oiga en vez de explicarse.",
+      "detail": "Implementa un sintetizador concatenativo completo en JavaScript sobre la Web Audio API, con los 41 fonemas del español (vocales, diptongos y consonantes) y visualización en vivo de cómo el texto se descompone en fonemas antes de sonar. Los mismos textos aparecen también generados con WaveNet y con Google Cloud TTS, reproducibles uno detrás de otro para comparar las tres técnicas de oído.",
       "metrics": [
         {
           "value": "41",

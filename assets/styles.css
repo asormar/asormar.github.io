@@ -585,6 +585,12 @@ body.is-ready { opacity: 1; transition: opacity 260ms var(--ease-out); }
   fill: var(--ink-3);
 }
 
+.viz__tick {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  fill: var(--ink-3);
+}
+
 .viz__num {
   font-family: var(--font-mono);
   font-size: 13px;
